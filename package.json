@@ -1,0 +1,10 @@
+{
+  "dependencies": {},
+  "scripts": {
+    "start": "bun run entry-point.ts",
+    "start-w-hot-reload": "nodemon"
+  },
+  "devDependencies": {
+    "bun-types": "^0.2.2"
+  }
+}
