@@ -1,7 +1,8 @@
 {
-  "dependencies": {},
+  "dependencies": {
+  },
   "scripts": {
-    "start": "bun run entry-point.ts",
+    "start": "bun run ./src/entry-point.ts",
     "start-w-hot-reload": "nodemon"
   },
   "devDependencies": {

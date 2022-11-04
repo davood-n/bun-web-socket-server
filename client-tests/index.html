@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Socket Client</title>
+</head>
+<body>
+  <!-- Simple input field with label and send button -->
+
+  <label for="message">Message</label>
+  <input type="text" id="message" name="message" value="Hello World">
+  <button id="send" onclick="sendMessage()">Send</button>
+
+  <!-- Web socket client -->
+  <script>
+    const socket = new WebSocket('ws://localhost:3000/chat');
+
+
+
+    alert('Welcome to app.');
+    socket.addEventListener('open', function (event) {
+      
+      alert('Connected to server');
+      // socket.send('Hello Server!');
+    });
+    socket.addEventListener('message', function (event) {
+      alert('Message from server ', event.data);
+    });
+
+    function sendMessage() {
+      const message = document.getElementById('message').value;
+      socket.send(message);
+    }
+
+  </script>
+</body>
+</html>
