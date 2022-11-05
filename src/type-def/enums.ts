@@ -1,4 +1,13 @@
 
+
+
+export enum RouteType {
+  WEB,
+  WEB_SOCKET,
+}
+
+
+
 // ----------- CLI Enums ----------//
 
 export enum CLIDefaultColors {

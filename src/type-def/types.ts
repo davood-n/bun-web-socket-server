@@ -1,26 +1,54 @@
-import { CLIBgColors, CLIDefaultColors, CLIFgColors } from "./enums";
+import { ServerDriver } from "../drivers/server/server-driver";
+import { WebSocketDriver } from "../drivers/web-socket/web-socket-driver";
+import { ServerLogger } from "../loggers/server-logger";
+import { WebSocketLogger } from "../loggers/web-socket-logger";
+import { RouteHandle } from "./abstract";
+import { CLIBgColors, CLIDefaultColors, CLIFgColors, RouteType } from "./enums";
 
 // ---------- Basic Types -------------//
-export type Dictonary = {
+export type Dictonary<K,V> = {
   [prop: string]: any
 }
 // ---------- End Basic Types ---------//
 
 
+// ---------- Master Driver -----------//
+export type MasterDriverConfig = {}
+// ---------- End Master Driver -------//
 
 
+// ---------- Server Driver -----------//
+export type ServerDriverConfig = {
+  port?: number,
+  rootUrl?: string,
+  WebSocketDriver: WebSocketDriver,
+  ServerLogger: ServerLogger,
+}; // ServerDriverConfig used to create a ServerDriver instance
+// ---------- End Server Driver -------//
+
+
+// ---------- Route --------//
+export type RouteHandleContext = {
+  request: Request,
+  middleware?: MiddlewareRouteHandle[]
+  WebSocketDriver: WebSocketDriver,
+  ServerDriver: ServerDriver,
+}
+
+export type Route = {
+  path: string,
+  handler: RouteHandle | ((context: RouteHandleContext) => void),
+  type: RouteType,
+}
 
 
 // ---------- WebSocket Types ---------//
 export type WebSocketDriverConfig = {
+  WebSocketLogger: WebSocketLogger,
   port?: number,
   rootUrl?: string,
 
 }; // WebSocketDriverConfig used to create a WebSocketDriver instance
-export type ServerDriverConfig = {
-  port?: number,
-  rootUrl?: string,
-}; // ServerDriverConfig used to create a ServerDriver instance
 export type WebSocketPayload = { // WebSocketPayload is the payload that is sent to the client.
   action: string,
   data: any

@@ -4,11 +4,14 @@
  * @author Davood Najafi <davood@najafi.cc>
  */
 
-export class ServerLogger {
-  // private _logChache: string[] = []; No cache for now
-  
-  constructor() {
-    // server logger inits before CommandLineDriver because command 
-  }
+import { CommandLineDriver } from "../drivers/etc/command-line-driver";
+import { Logger } from "../type-def/abstract";
 
+export class ServerLogger extends Logger {
+  componentName: string;
+  // Will make a use for seperate loggers for the server and the web socket server.
+  constructor(commandLineDriver: CommandLineDriver) {
+    super(commandLineDriver);
+    this.componentName = "SERVER";
+  }
 }

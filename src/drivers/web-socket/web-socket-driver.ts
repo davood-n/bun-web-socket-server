@@ -3,13 +3,23 @@
  * @author Davood Najafi <davood@najafi.cc>
  */
 
+import { WebSocketLogger } from "../../loggers/web-socket-logger";
+import { WebSocketDriverConfig, WebSocketPayload } from "../../type-def/types";
 
-const defaultConfig = {};
+
+
 
 export class WebSocketDriver {
-  
-  constructor(config: WebSocketDriverConfig = defaultConfig) {
-   
+  private WebSocketLogger: WebSocketLogger
+
+  constructor(config: WebSocketDriverConfig) {
+    config.WebSocketLogger.message('WebSocketDriver is initializing...');
+    this.WebSocketLogger = config.WebSocketLogger;
+    this.WebSocketLogger.success('WebSocketDriver initialized!');
+  }
+
+  public getLogger() {
+    return this.WebSocketLogger;
   }
 
   public bunWebSocketHandler() {
