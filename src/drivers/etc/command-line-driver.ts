@@ -92,6 +92,17 @@ export class CommandLineDriver {
     });
   }
 
+  public fromApp(message: string) {
+    this.send({
+      type: "app",
+      message: message,
+      color: {
+        background: CLIBgColors.Black,
+        foreground: CLIFgColors.Magenta
+      } as CLIColorProfile,
+    });
+  }
+
   // common stdout //
 
 
