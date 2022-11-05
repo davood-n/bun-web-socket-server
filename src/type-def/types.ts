@@ -1,8 +1,10 @@
+import { RouteDriver } from "../drivers/route/route-driver";
 import { ServerDriver } from "../drivers/server/server-driver";
 import { WebSocketDriver } from "../drivers/web-socket/web-socket-driver";
+import { MiddlewareRouteList } from "../lib/middleware/middleware-route-list";
 import { ServerLogger } from "../loggers/server-logger";
 import { WebSocketLogger } from "../loggers/web-socket-logger";
-import { RouteHandle } from "./abstract";
+import { MiddlewareRouteHandle, RouteHandle } from "./abstract";
 import { CLIBgColors, CLIDefaultColors, CLIFgColors, RouteType } from "./enums";
 
 // ---------- Basic Types -------------//
@@ -13,7 +15,10 @@ export type Dictonary<K,V> = {
 
 
 // ---------- Master Driver -----------//
-export type MasterDriverConfig = {}
+export type MasterDriverConfig = {
+  port?: number,
+  rootUrl?: string,
+}
 // ---------- End Master Driver -------//
 
 
@@ -22,6 +27,7 @@ export type ServerDriverConfig = {
   port?: number,
   rootUrl?: string,
   WebSocketDriver: WebSocketDriver,
+  RouteDriver: RouteDriver,
   ServerLogger: ServerLogger,
 }; // ServerDriverConfig used to create a ServerDriver instance
 // ---------- End Server Driver -------//
@@ -30,9 +36,9 @@ export type ServerDriverConfig = {
 // ---------- Route --------//
 export type RouteHandleContext = {
   request: Request,
-  middleware?: MiddlewareRouteHandle[]
-  WebSocketDriver: WebSocketDriver,
-  ServerDriver: ServerDriver,
+  server: any,
+  middleware?: MiddlewareRouteList,
+  WebSocketDriver: WebSocketDriver
 }
 
 export type Route = {

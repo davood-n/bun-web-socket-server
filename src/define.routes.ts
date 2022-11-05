@@ -2,4 +2,4 @@
 
 import RoutesRegistry from "./drivers/route/routes-registry";
 
-RoutesRegistry.registerRoute("/auth", import.meta.require("./routes/ping-back"));
+RoutesRegistry.registerRoute("/ping-back", import.meta.require("./routes/ping-back"));

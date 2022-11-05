@@ -56,10 +56,13 @@ export abstract class WebRouteHandle extends RouteHandle {
   }
 }
 
-export abstract class SocketRouteHandle extends RouteHandle {
+export abstract class WebSocketRouteHandle extends RouteHandle {
   public handle(context: RouteHandleContext): void{
 
   }
+
+  public abstract onUpgradeFailed(): void;
+
   public abstract onMessage(): void;
   
   
