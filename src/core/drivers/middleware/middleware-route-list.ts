@@ -26,6 +26,7 @@ export class MiddlewareRouteList {
    * @throws {Error} If the route is already in the list.
    */
   public add(route: MiddlewareRouteHandle): MiddlewareRouteListNode {
+
     if (!(route instanceof MiddlewareRouteHandle)) {
       throw new Error('Route must be an instance of MiddlewareRouteHandle');
     }

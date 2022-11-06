@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "es2022",
     "module": "es2022",
-    "types": ["bun-types"],
-    "moduleResolution":"node",
-  
-    
+    "types": [
+      "bun-types"
+    ],
+    "moduleResolution": "node",
   }
 }

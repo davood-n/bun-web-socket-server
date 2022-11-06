@@ -1,10 +1,14 @@
+import RoutesRegistry from "../../define.routes";
+import { AuthorizationDriver } from "../drivers/authorization/authorization-driver";
+import { MiddlewareDriver } from "../drivers/middleware/middleware-driver";
 import { RouteDriver } from "../drivers/route/route-driver";
-import { ServerDriver } from "../drivers/server/server-driver";
+import { ServerDriverInterface } from "../drivers/server/server-driver-interface";
 import { WebSocketDriver } from "../drivers/web-socket/web-socket-driver";
-import { MiddlewareRouteList } from "../lib/middleware/middleware-route-list";
+import { AuthorizationLogger } from "../loggers/authorization-logger";
+import { RouteLogger } from "../loggers/route-logger";
 import { ServerLogger } from "../loggers/server-logger";
 import { WebSocketLogger } from "../loggers/web-socket-logger";
-import { MiddlewareRouteHandle, RouteHandle } from "./abstract";
+import { RouteHandle } from "./abstract";
 import { CLIBgColors, CLIDefaultColors, CLIFgColors, RouteType } from "./enums";
 
 // ---------- Basic Types -------------//
@@ -16,11 +20,25 @@ export type Dictonary<K,V> = {
 
 // ---------- Master Driver -----------//
 export type MasterDriverConfig = {
+  RoutesRegistry?: RoutesRegistry,
   port?: number,
   rootUrl?: string,
 }
 // ---------- End Master Driver -------//
 
+export type RouteDriverConfig = {
+  RouteDriverLogger: RouteLogger,
+  port?: number,
+  rootUrl?: string,
+}
+
+export type AuthorizationDriverConfig = {
+  AuthorizationDriverLogger: AuthorizationLogger,
+}
+
+export type MiddlewareDriverConfig = {
+  MiddlewareDriverLogger: RouteLogger,
+}
 
 // ---------- Server Driver -----------//
 export type ServerDriverConfig = {
@@ -29,6 +47,8 @@ export type ServerDriverConfig = {
   WebSocketDriver: WebSocketDriver,
   RouteDriver: RouteDriver,
   ServerLogger: ServerLogger,
+  AuthorizationDriver: AuthorizationDriver,
+  MiddlewareDriver: MiddlewareDriver,
 }; // ServerDriverConfig used to create a ServerDriver instance
 // ---------- End Server Driver -------//
 
@@ -37,13 +57,22 @@ export type ServerDriverConfig = {
 export type RouteHandleContext = {
   request: Request,
   server: any,
-  middleware?: MiddlewareRouteList,
-  WebSocketDriver: WebSocketDriver
+  ServerDriverInterface: ServerDriverInterface,
+  WebSocketDriver: WebSocketDriver,
+  AuthorizationDriver: AuthorizationDriver,
+}
+
+export type MiddlewareRouteHandleContext = {
+  request: Request,
+  server: any,
+  WebSocketDriver: WebSocketDriver,
+  AuthorizationDriver: AuthorizationDriver,
+  next: () => void | true | false, // can continue to next middleware or end the chain?
 }
 
 export type Route = {
   path: string,
-  handler: RouteHandle | ((context: RouteHandleContext) => void),
+  handler: RouteHandle,
   type: RouteType,
 }
 

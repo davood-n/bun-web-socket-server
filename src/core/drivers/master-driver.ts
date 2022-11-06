@@ -5,12 +5,17 @@
 
 import { ServerLogger } from "../loggers/server-logger";
 import { WebSocketLogger } from "../loggers/web-socket-logger";
-import { CLIBgColors, CLIFgColors } from "../type-def/enums";
-import { MasterDriverConfig } from "../type-def/types";
+import { MasterDriverConfig, ServerDriverConfig } from "../type-def/types";
 import { CommandLineDriver } from "./etc/command-line-driver";
 import { RouteDriver } from "./route/route-driver";
+import { RouteLogger } from "../loggers/route-logger";
 import { ServerDriver } from "./server/server-driver";
 import { WebSocketDriver } from "./web-socket/web-socket-driver";
+import { AuthorizationDriver } from "./authorization/authorization-driver";
+import { AuthorizationLogger } from "../loggers/authorization-logger";
+import { MiddlewareDriver } from "./middleware/middleware-driver";
+import { MiddlewareLogger } from "../loggers/middleware-logger";
+
 
 
 export class MasterDriver {
@@ -22,6 +27,11 @@ export class MasterDriver {
   private _port: number;
   private _rootUrl: string;
   RouteDriver: RouteDriver;
+  AuthorizationDriver: AuthorizationDriver;
+  MiddlewareDriver: MiddlewareDriver;
+  RouteLogger: RouteLogger;
+  AuthorizationLogger: AuthorizationLogger;
+  MiddlewareLogger: MiddlewareLogger;
 
   
   constructor(config?: MasterDriverConfig) {
@@ -30,7 +40,7 @@ export class MasterDriver {
     this._rootUrl = config?.rootUrl || `http://0.0.0.0:${this._port}`;
     config = {
       port: this._port,
-      rootUrl: this._rootUrl
+      rootUrl: this._rootUrl,
     };
     
     /**
@@ -46,6 +56,17 @@ export class MasterDriver {
     this.WebSocketLogger = new WebSocketLogger(this.CommandLineDriver);
     this.CommandLineDriver.success('WebSocketLogger initialized!');
     
+    this.CommandLineDriver.message('RouteLogger is initializing...', 'MASTER-DRIVER');
+    this.RouteLogger = new RouteLogger(this.CommandLineDriver);
+    this.CommandLineDriver.success('RouteLogger initialized!');
+
+    this.CommandLineDriver.message('AuthorizationLogger is initializing...', 'MASTER-DRIVER');
+    this.AuthorizationLogger = new AuthorizationLogger(this.CommandLineDriver);
+    this.CommandLineDriver.success('AuthorizationLogger initialized!');
+
+    this.CommandLineDriver.message('MiddlewareLogger is initializing...', 'MASTER-DRIVER');
+    this.MiddlewareLogger = new MiddlewareLogger(this.CommandLineDriver);
+    this.CommandLineDriver.success('MiddlewareLogger initialized!');
 
     const webSocketDriverConfig = {
       WebSocketLogger: this.WebSocketLogger,
@@ -56,16 +77,36 @@ export class MasterDriver {
 
 
     this.CommandLineDriver.message('RouteDriver is initializing...', 'MASTER-DRIVER');
-    this.RouteDriver = new RouteDriver(config);
+    this.RouteDriver = new RouteDriver({
+      RouteDriverLogger: this.RouteLogger,
+      port: this._port,
+      rootUrl: this._rootUrl,
+    });
     this.CommandLineDriver.success('RouteDriver initialized!');
 
+    this.CommandLineDriver.message('AuthorizationDriver is initializing...', 'MASTER-DRIVER');
+    this.AuthorizationDriver = new AuthorizationDriver({
+      AuthorizationDriverLogger: this.AuthorizationLogger,
+    });
+    this.CommandLineDriver.success('AuthorizationDriver initialized!');
+
+
+    this.CommandLineDriver.message('MiddlewareDriver is initializing...', 'MASTER-DRIVER');
+    this.MiddlewareDriver = new MiddlewareDriver({
+      MiddlewareDriverLogger: this.MiddlewareLogger,
+    });
+    this.CommandLineDriver.success('MiddlewareDriver initialized!');
 
 
     const serverDriverConfig = {
+      port: this._port,
+      rootUrl: this._rootUrl,
       WebSocketDriver: this.WebSocketDriver,
       RouteDriver: this.RouteDriver,
-      ServerLogger: this.ServerLogger
-    };
+      ServerLogger: this.ServerLogger,
+      AuthorizationDriver: this.AuthorizationDriver,
+      MiddlewareDriver: this.MiddlewareDriver,
+    } as ServerDriverConfig;
     this.CommandLineDriver.message('ServerDriver is initializing...', 'MASTER-DRIVER');
     this.ServerDriver = new ServerDriver(serverDriverConfig);
     this.CommandLineDriver.success('ServerDriver initialized!');

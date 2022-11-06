@@ -1,5 +1,20 @@
 // file for defining routes and their handlers
+import RoutesRegistry  from "./define.middleware"
 
-import RoutesRegistry from "./drivers/route/routes-registry";
+import { RouteType } from "./core/type-def/enums";
+import Auth from "./handlers/auth";
+import HelloWorld from "./handlers/hello-world";
 
-RoutesRegistry.registerRoute("/ping-back", import.meta.require("./routes/ping-back"));
+RoutesRegistry.registerRoute({
+  path: "/hello-world",
+  handler: HelloWorld,
+  type: RouteType.WEB
+})
+
+RoutesRegistry.registerRoute({
+  path: "/auth",
+  handler: Auth,
+  type: RouteType.WEB
+})
+
+export default RoutesRegistry;

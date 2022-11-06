@@ -3,17 +3,20 @@
  * @author Davood Najafi <davood@najafi.cc>
  */
 
-import { RouteHandle } from "../../type-def/abstract";
-import { MasterDriverConfig, Route } from "../../type-def/types";
+
+import { RouteLogger } from "../../loggers/route-logger";
+import {  Route, RouteDriverConfig } from "../../type-def/types";
 import RoutesRegistry from "./routes-registry";
 
 export class RouteDriver {
   private _routes: Map<string, Route>;
   private _rootUrl: string;
+  private RouteDriverLogger: RouteLogger;
   
-  constructor(serverDriverConfing: MasterDriverConfig)
+  constructor(config: RouteDriverConfig)
   {
-    this._rootUrl = serverDriverConfing.rootUrl;
+    this.RouteDriverLogger = config.RouteDriverLogger;
+    this._rootUrl = config.rootUrl;
     this._routes = RoutesRegistry.retrieveRoutes(); // We want to make a copy so that we don't modify the original and it won't update with the original unles we want it to.
   }
 
@@ -23,10 +26,11 @@ export class RouteDriver {
   }
 
   public findInRouteRegistry(routeName: string): Route {
-    return RoutesRegistry.retrieveRoute(routeName);
+    const results = RoutesRegistry.retrieveRoute(this.realUrl(routeName));
+    return results;
   }
 
-  private realUrl(url) {
+  private realUrl(url: string) {
     let trimmedUrl = url.replace(this._rootUrl, '').trim();
     return trimmedUrl;
   }
