@@ -65,7 +65,7 @@ export class ServerDriver {
     });
   }
 
-  public getLogger() {
+  public getLogger(): ServerLogger {
     return this.ServerLogger;
   }
 
@@ -87,6 +87,7 @@ export class ServerDriver {
 
 
     const context: RouteHandleContext = {
+      authLevelForRequestedRoute: route.authLevel,
       request: req,
       server: server,
       WebSocketDriver: this.WebSocketDriver,

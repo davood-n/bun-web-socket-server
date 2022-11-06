@@ -13,10 +13,12 @@ export class AuthorizationDriver {
     this.AuthorizationDriverLogger = config.AuthorizationDriverLogger;
   }
 
-  public async authenticateRequest(request: Request): Promise<boolean> {
+  public async authenticateRequest(request: Request, levelForRoute: number): Promise<boolean> {
     let isAuthenticated = false;
     const authorizationHeader: null | string = request.headers.get('Authorization');
     const token = authorizationHeader && authorizationHeader.split(' ')[1]; // this is the token part of Authorization: Bearer <token>
+    
+    
     if (token === null){
       this.AuthorizationDriverLogger.warning("Authorization header is null");
       return false;
@@ -24,7 +26,13 @@ export class AuthorizationDriver {
 
     try {
       const verifcationStatus = await jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
+      console.log(verifcationStatus);
+      
       if (verifcationStatus) {
+        // now decode the token to get the user id
+        const decodedToken = await jwt.decode(token);
+        console.log(decodedToken);
+
         this.AuthorizationDriverLogger.success("Request is authenticated.");
         isAuthenticated = true;
       }

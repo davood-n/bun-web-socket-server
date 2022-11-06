@@ -24,10 +24,7 @@ export class MiddlewareRouteListNode {
     }
 
     this.next.route.handle({
-      request: context.request,
-      server: context.server,
-      WebSocketDriver: context.WebSocketDriver,
-      AuthorizationDriver: context.AuthorizationDriver,
+      ...context,
       next: () => this.next.handleNextMiddlewareNode(context),
     } as MiddlewareRouteHandleContext);
   }

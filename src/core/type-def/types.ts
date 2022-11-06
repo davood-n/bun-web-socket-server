@@ -55,6 +55,7 @@ export type ServerDriverConfig = {
 
 // ---------- Route --------//
 export type RouteHandleContext = {
+  authLevelForRequestedRoute?: number,
   request: Request,
   server: any,
   ServerDriverInterface: ServerDriverInterface,
@@ -63,9 +64,11 @@ export type RouteHandleContext = {
 }
 
 export type MiddlewareRouteHandleContext = {
+  authLevelForRequestedRoute?: number,
   request: Request,
   server: any,
   WebSocketDriver: WebSocketDriver,
+  ServerDriverInterface: ServerDriverInterface,
   AuthorizationDriver: AuthorizationDriver,
   next: () => void | true | false, // can continue to next middleware or end the chain?
 }
@@ -74,6 +77,7 @@ export type Route = {
   path: string,
   handler: RouteHandle,
   type: RouteType,
+  authLevel?: number,
 }
 
 

@@ -4,9 +4,9 @@
 
 import RoutesRegistry from "./core/drivers/route/routes-registry";
 
-import FakeAuth from "./middleware/fake-auth";
+import Auth from "./middleware/auth";
 
 
-// RoutesRegistry.registerMiddleware(FakeAuth);
+RoutesRegistry.registerMiddleware(Auth);
 
 export default RoutesRegistry;

@@ -3,11 +3,19 @@ import { MiddlewareRouteHandleContext, RouteHandleContext } from "../core/type-d
 
 class Auth extends MiddlewareRouteHandle {
   public async handle(context: MiddlewareRouteHandleContext): Promise<any> {
-    const status = await context.AuthorizationDriver.authenticateRequest(context.request);
+    if (context.authLevelForRequestedRoute === undefined)
+    {
+      context.next();
+      return true;
+    }
+
+    const status = await context.AuthorizationDriver.authenticateRequest(context.request, context.authLevelForRequestedRoute);
     if (status === false) {
       return false;
     }
     context.next(); // move to next middleware if exists
+    
+    
     return true;
   }
 }
