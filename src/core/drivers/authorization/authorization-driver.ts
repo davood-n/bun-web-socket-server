@@ -13,6 +13,14 @@ export class AuthorizationDriver {
     this.AuthorizationDriverLogger = config.AuthorizationDriverLogger;
   }
 
+  public parseJSONMessage(payload: string)
+  {
+    // todo: add other operations
+    let jsonObj = JSON.parse(payload);
+
+    return jsonObj;
+  }
+
   public async authenticateRequest(request: Request, levelForRoute: number): Promise<boolean> {
     let isAuthenticated = false;
     const authorizationHeader: null | string = request.headers.get('Authorization');
@@ -48,4 +56,20 @@ export class AuthorizationDriver {
     const encryptedMsg: string = await jwt.sign(message, process.env.JSON_WEB_TOKEN_SECRET);
     return encryptedMsg;
   }
+
+  public async decryptMessage(message: string): Promise<any> {
+    // Will use JWT to decrypt the message
+    const decryptedMsg: {header: string, payload: any} = await jwt.decode(message);
+    return decryptedMsg;
+  }
+
+
+  public async getUserModelFromRequest(request: Request): Promise<any> {
+    // this will get the user model from the request
+    const authorizationHeader: null | string = request.headers.get('Authorization');
+    const token = authorizationHeader && authorizationHeader.split(' ')[1]; // this is the token part of Authorization: Bearer <token>
+    const decodedToken = await jwt.decode(token);
+    return decodedToken;
+  }
+
 }

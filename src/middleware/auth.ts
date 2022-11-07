@@ -3,7 +3,7 @@ import { MiddlewareRouteHandleContext, RouteHandleContext } from "../core/type-d
 
 class Auth extends MiddlewareRouteHandle {
   public async handle(context: MiddlewareRouteHandleContext): Promise<any> {
-    if (context.authLevelForRequestedRoute === undefined)
+    if (context.authLevelForRequestedRoute === undefined) // means the page is not protected
     {
       context.next();
       return true;

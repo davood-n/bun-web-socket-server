@@ -104,6 +104,33 @@ export type WebSocketClientConnectionParams = { // Used to create a new WebSocke
 
 
 
+export interface UserModel {
+  id: string,
+  authLevel: number,
+
+  getId(): string,
+  getAuthLevel(): number,
+}
+
+
+export type ClientUserFactoryConfig = {
+  logClientModels?: boolean,
+}
+
+export type ServerUserFactoryConfig = {
+  logClientModels?: boolean,
+};
+
+export type ClientUserModelSpecifications = {
+  id: string,
+  authLevel?: number,
+  // Todo: add more fields
+}
+export type ServerUserModelSpecifications = {
+  id: string,
+  authLevel?: number,
+  // Todo: add more fields
+}
 
 // ---------- CLI Types -----------//
 

@@ -21,7 +21,9 @@ export class ServerDriver {
   private ServerLogger: ServerLogger;
   private AuthorizationDriver: AuthorizationDriver
   private MiddlewareDriver: MiddlewareDriver
-  ServerDriverInterface: { json: (payload: { [prop: string]: any; }, status: any) => Response; getLogger: () => ServerLogger; };
+  private ServerDriverInterface: { json: (payload: { [prop: string]: any; }, status: any) => Response; getLogger: () => ServerLogger; };
+
+
 
 
   constructor(config: ServerDriverConfig) {
@@ -69,8 +71,10 @@ export class ServerDriver {
     return this.ServerLogger;
   }
 
+
   private bunFetchHandler(req: Request, server) {
     const route: Route = this.RouteDriver.findInRouteRegistry(req.url);
+    const requestUserModel = this.AuthorizationDriver.getUserModelFromRequest(req);
     if (route === undefined) {
       return new Response('Not Found', { status: 404 });
     }
@@ -84,8 +88,6 @@ export class ServerDriver {
   }
   private handleWebRoute(req: Request, server, route: Route) {
     // Need to turn content type to json
-
-
     const context: RouteHandleContext = {
       authLevelForRequestedRoute: route.authLevel,
       request: req,
@@ -128,5 +130,7 @@ export class ServerDriver {
 
   }
 
+
+  
 
 }
