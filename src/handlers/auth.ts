@@ -2,14 +2,14 @@
  * 
  */
 
-import { RouteHandle, WebRouteHandle } from "../core/type-def/abstract";
+import { WebRouteHandle } from "../core/type-def/abstract";
 import { RouteHandleContext } from "../core/type-def/types";
 
 class Auth extends WebRouteHandle {
 
   public async handle(context: RouteHandleContext) {
     
-    const authStatus = await context.AuthorizationDriver.authenticateRequest(context.request);
+    // const authStatus = await context.AuthorizationDriver.authenticateRequest(context.request);
 
     const queryTest = await context.AuthorizationDriver.encryptMessage("Hello World");
 

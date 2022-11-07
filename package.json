@@ -4,6 +4,7 @@
   },
   "scripts": {
     "start": "bun run ./src/entry-point.ts",
-    "dev": "nodemon -L"
+    "dev": "nodemon -L",
+    "code-count": "cd src && git ls-files | xargs cat | wc -l"
   }
 }

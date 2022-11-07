@@ -31,7 +31,7 @@ export class AuthorizationDriver {
       if (verifcationStatus) {
         // now decode the token to get the user id
         const decodedToken = await jwt.decode(token);
-        console.log(decodedToken);
+        console.log(decodedToken); // this needs to be passed to a model factory to get the user model
 
         this.AuthorizationDriverLogger.success("Request is authenticated.");
         isAuthenticated = true;
