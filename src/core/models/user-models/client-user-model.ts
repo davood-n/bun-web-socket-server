@@ -2,7 +2,7 @@
  * Model for all client connections that don't have elevated access to this software. Such as a user recieving messages from server, and sending  client messages that are client formatted.
  */
 
-import { ClientUserModelSpecifications, UserModel } from "../../types";
+import { ClientUserModelSpecifications, UserModel } from "../../type-def/types";
 
 export class ClientUserModel implements UserModel {
   constructor(modelSpecs: ClientUserModelSpecifications) {

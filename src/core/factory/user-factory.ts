@@ -3,8 +3,8 @@
  * @author Davood Najafi <davood@najafi.cc>
  */
 
-import { ClientUserModel } from "../type-def/models/user-models/client-user-model";
-import { ServerUserModel } from "../type-def/models/user-models/server-user-model";
+import { ClientUserModel } from "../models/user-models/client-user-model";
+import { ServerUserModel } from "../models/user-models/server-user-model";
 import { ClientUserModelSpecifications, ServerUserModelSpecifications } from "../type-def/types";
 import { ClientUserFactory } from "./client-user-factory";
 import { ServerUserFactory } from "./server-user-factory";

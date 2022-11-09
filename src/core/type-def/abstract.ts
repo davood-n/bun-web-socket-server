@@ -13,6 +13,10 @@ export abstract class Logger {
     this.commandLineDriver = commandLineDriver;
   }
 
+
+  public info(message: string): void{
+    this.commandLineDriver.info(message, this.componentName + '-LOGGER');
+  }
   public log(message: string): void{
     this.commandLineDriver.log(message, this.componentName + '-LOGGER');
   }
@@ -57,16 +61,17 @@ export abstract class WebRouteHandle extends RouteHandle {
 
 export abstract class WebSocketRouteHandle extends RouteHandle {
   
-  public async handle(context: RouteHandleContext): Promise<Response>{
-    return await new Response("Hello world!", { status: 200 });
+  public context: RouteHandleContext;
+  public handle(context: RouteHandleContext): void {
+    this.context = context;
   }
 
-  public abstract onUpgradeFailed(): void;
-  public abstract onUpgradeSuccess(): void;
+  public abstract onUpgradeFailed(): void; // could not connect
+  public abstract onUpgradeSuccess(): void; // connnection started
 
-  public abstract onMessage(): void;
+  public abstract onMessage(msg: any): void; // When a client messages to server
   
-  public broadcast(): void{
+  public broadcast(): void{ // Broadcast to all clients
     // need to some how access the context that is passed in to the handle method.
   }
 }

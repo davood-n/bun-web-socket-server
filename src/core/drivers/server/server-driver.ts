@@ -74,7 +74,7 @@ export class ServerDriver {
 
   private bunFetchHandler(req: Request, server) {
     const route: Route = this.RouteDriver.findInRouteRegistry(req.url);
-    const requestUserModel = this.AuthorizationDriver.getUserModelFromRequest(req);
+    // const requestUserModel = this.AuthorizationDriver.getUserModelFromRequest(req); implement later when we got a working JWT lib
     if (route === undefined) {
       return new Response('Not Found', { status: 404 });
     }
@@ -109,23 +109,26 @@ export class ServerDriver {
 
   private handleWebSocketRoute(req: Request, server, route: Route) {
     // have to upgrade connection first then pass it to the context obj
-    if (!server.upgrade(req)) {
-      this.ServerLogger.error('Failed to upgrade request to websocket.');
-      //@ts-ignore because of the above if statement
-      route.handler.onUpgradeFailed();
-    } else {
-      // @ts-ignore
-      route.handler.onUpgradeSuccess();
-    }
-
     const context: RouteHandleContext = {
+      authLevelForRequestedRoute: route.authLevel,
       request: req,
       server: server,
       WebSocketDriver: this.WebSocketDriver,
       AuthorizationDriver: this.AuthorizationDriver,
       ServerDriverInterface: this.ServerDriverInterface
     };
+    if (!server.upgrade(req)) {
+      this.ServerLogger.error('Failed to upgrade request to websocket.');
+      //@ts-ignore because of the above if statement
+      route.handler.onUpgradeFailed();
+    } else {
+      this.ServerLogger.info('Upgraded request to websocket.');
+      route.handler.handle(context) // loads the context into the websocket route handle bc web sockets.
+      // @ts-ignore
+      route.handler.onUpgradeSuccess();
+    }
 
+    
     this.MiddlewareDriver.startMiddleware(context);
 
   }

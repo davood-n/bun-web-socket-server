@@ -29,7 +29,7 @@ export class WebSocketDriver {
         console.log(ws);
   
         // subscribe to "the-group-chat" topic
-        ws.subscribe("the-group-chat");
+        // ws.subscribe("the-group-chat");
       },
   
       message(ws, message) {

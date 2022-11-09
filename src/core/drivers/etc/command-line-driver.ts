@@ -36,6 +36,16 @@ export class CommandLineDriver {
   }
 
   // common stdout //
+  public info(message: string, from?: string) {
+    this.stdoutWithColor({
+      message: message,
+      type: from ? from : "info",
+      color: {
+        background: CLIBgColors.Black,
+        foreground: CLIFgColors.Cyan,
+      } as CLIColorProfile,
+    });
+  }
   public log(message: string, from?: string) {
     this.send({
       type: from ?? "log",

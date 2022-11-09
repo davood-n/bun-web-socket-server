@@ -2,7 +2,7 @@
  * Model for all server connections that have elevated access to this software.
  */
 
-import { ServerUserModelSpecifications, UserModel } from "../../types";
+import { ServerUserModelSpecifications, UserModel } from "../../type-def/types";
 export class ServerUserModel {
 
   constructor(modelSpecs: ServerUserModelSpecifications) {

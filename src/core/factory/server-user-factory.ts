@@ -1,4 +1,4 @@
-import { ServerUserModel } from "../type-def/models/user-models/server-user-model";
+import { ServerUserModel } from "../models/user-models/server-user-model";
 import { ServerUserFactoryConfig, ServerUserModelSpecifications } from "../type-def/types";
 
 export class ServerUserFactory {
