@@ -25,10 +25,11 @@ export class WebSocketDriver {
   public bunWebSocketHandler() {
     return {
       open(ws) {
-        console.log("WebSocket opened");
+        this.WebSocketLogger.info('WebSocket opened');
         console.log(ws);
-  
-        // subscribe to "the-group-chat" topic
+
+        // when the ws opens we should attach the ws instance to a user model object.
+        
         // ws.subscribe("the-group-chat");
       },
   
@@ -40,7 +41,7 @@ export class WebSocketDriver {
       },
   
       close(ws: any, code: number, reason: string) {
-        ws.publish("the-group-chat", `${ws.data.name} left the chat`);
+        // ws.publish("the-group-chat", `${ws.data.name} left the chat`);
       },
   
       drain(ws) {
