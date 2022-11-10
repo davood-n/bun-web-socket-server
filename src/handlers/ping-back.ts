@@ -7,10 +7,12 @@ import { RouteHandleContext } from "../core/type-def/types";
 
 class PingBack extends WebSocketRouteHandle {
   public onUpgradeFailed(): void {
-    throw new Error("Method not implemented.");
+    
+    this.context.WebSocketDriver.getLogger().error("PingBack route failed to connect");
   }
 
   public onUpgradeSuccess(): void {
+    this.context.server.upgrade(this.context.request);
     this.context.WebSocketDriver.getLogger().info("PingBack route connected");
   }
 

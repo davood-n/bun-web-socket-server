@@ -1,4 +1,3 @@
-import RoutesRegistry from "../../define.routes";
 import { CommandLineDriver } from "../drivers/etc/command-line-driver";
 import { CLIColorProfile, MiddlewareRouteHandleContext, RouteHandleContext } from "./types";
 
@@ -71,7 +70,7 @@ export abstract class WebSocketRouteHandle extends RouteHandle {
 
   public abstract onMessage(msg: any): void; // When a client messages to server
   
-  public broadcast(): void{ // Broadcast to all clients
-    // need to some how access the context that is passed in to the handle method.
+  public broadcast(msg: any): void{ // Broadcast to all clients
+    // broatcast to all clients through the WebSocketDriver in the context
   }
 }
