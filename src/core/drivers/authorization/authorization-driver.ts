@@ -33,7 +33,7 @@ export class AuthorizationDriver {
     }
 
     try {
-      const verifcationStatus = await jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
+      const verifcationStatus = "123" //await jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
       console.log(verifcationStatus);
       
       if (verifcationStatus) {
@@ -53,7 +53,7 @@ export class AuthorizationDriver {
 
   public async encryptMessage(message: string): Promise<string> {
     // Will use JWT to encrypt the message
-    const encryptedMsg: string = await jwt.sign(message, process.env.JSON_WEB_TOKEN_SECRET);
+    const encryptedMsg: string = "test"//await jwt.sign(message, process.env.JSON_WEB_TOKEN_SECRET);
     return encryptedMsg;
   }
 

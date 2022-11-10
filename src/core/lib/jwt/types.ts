@@ -1,3 +1,4 @@
+// https://github.com/honojs/hono/tree/main/src/utils/jwt
 export class JwtAlgorithmNotImplemented extends Error {
   constructor(token: string) {
     super(`invalid JWT token: ${token}`)
