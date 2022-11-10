@@ -3,6 +3,7 @@
  * @author Davood Najafi <davood@najafi.cc>
  */
 
+import { Server } from "bun";
 import { ServerLogger } from "../../loggers/server-logger";
 import { WebRouteHandle, WebSocketRouteHandle } from "../../type-def/abstract";
 import { RouteType } from "../../type-def/enums";
@@ -61,7 +62,13 @@ export class ServerDriver {
 
   public serve() {
     Bun.serve({
-      fetch: (req, server) => this.bunFetchHandler(req, server),
+      fetch: (req, server) => {
+        if (server.upgrade(req)){
+          return
+        }else {
+          return new Response('Not Found', { status: 404 });
+        }
+      },//this.bunFetchHandler(req, server),
       websocket: this.WebSocketDriver.bunWebSocketHandler(),
       port: this._port,
     });
@@ -107,7 +114,8 @@ export class ServerDriver {
   }
 
 
-  private handleWebSocketRoute(req: Request, server, route: Route) {
+  private handleWebSocketRoute(req: Request, server: Server, route: Route) {
+    this.ServerLogger.info(`WebSocket route ${route.path} connected`);
     // have to upgrade connection first then pass it to the context obj
     const context: RouteHandleContext = {
       authLevelForRequestedRoute: route.authLevel,
@@ -117,23 +125,38 @@ export class ServerDriver {
       AuthorizationDriver: this.AuthorizationDriver,
       ServerDriverInterface: this.ServerDriverInterface
     };
-    if (!server.upgrade(req)) {
+    this.ServerLogger.info(`context initialized`);
+
+    route.handler.handle(context) // loads the context into the websocket route handle bc web sockets.
+    // const upgrade = this.upgrade2WebSocket(req, server);
+    // console.log(upgrade);
+    if (false) {
       this.ServerLogger.error('Failed to upgrade request to websocket.');
-      //@ts-ignore because of the above if statement
+      // @ts-ignore because of the above if statement
       route.handler.onUpgradeFailed();
     } else {
       this.ServerLogger.info('Upgraded request to websocket.');
-      route.handler.handle(context) // loads the context into the websocket route handle bc web sockets.
       // @ts-ignore
       route.handler.onUpgradeSuccess();
     }
 
-    
-    this.MiddlewareDriver.startMiddleware(context);
+
+    // this.MiddlewareDriver.startMiddleware(context);
 
   }
 
 
-  
+  upgrade2WebSocket(req: Request, server: Server) {
+    const upgrade = server.upgrade(req);
+    console.log(upgrade);
+
+    if (upgrade === false) {
+      return this.json({ message: 'Forbidden.' }, 403);
+    }
+    return upgrade;
+
+  }
+
+
 
 }
